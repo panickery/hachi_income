@@ -1,4 +1,5 @@
 # app.py
+# streamlit run app.py
 
 import streamlit as st
 from hachi_income.income_utils import SalaryCalculator
