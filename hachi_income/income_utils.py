@@ -32,3 +32,25 @@ def convert_to_korean_currency_units(amount):
     if man > 0 or eok == 0:
         result += f"{man}만원"
     return result.strip()
+
+
+def estimate_gross_salary_auto(net_monthly_income):
+    """
+    세후 월소득 기준으로 공제율을 추정하여 세전 연봉을 계산합니다.
+    공제율은 대략적인 세후 기준에 따라 자동 설정됩니다.
+
+    :param net_monthly_income: 세후 월소득 (원 단위)
+    :return: 세전 연봉 추정값 (원 단위)
+    """
+    # 간단한 공제율 추정 로직 (현실적으로 근사치)
+    if net_monthly_income < 2500000:
+        rate = 0.10  # 초봉, 공제율 낮음
+    elif net_monthly_income < 4000000:
+        rate = 0.12  # 중간
+    elif net_monthly_income < 6000000:
+        rate = 0.15  # 고소득
+    else:
+        rate = 0.20  # 고연봉
+
+    gross_annual_salary = (net_monthly_income * 12) / (1 - rate)
+    return round(gross_annual_salary), rate
