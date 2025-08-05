@@ -122,16 +122,16 @@ real_second_income = real_day_income / avg_work_time / 60 / 60
 comm_second_income = comm_day_income / 24 / 60 / 60
 
 st.write(f"- 실 근무일 일당(세후) : {real_day_income :,.0f}만원 (한달 약 {work_day_per_month:,.1f}일)")
-st.write(f"- 통상 일당(세후) : {comm_day_income :,.0f}원(한달 약 {30}일)")
+st.write(f"- 통상 일당(세후) : {comm_day_income :,.0f}원(한달 약 {30:,.0f}일)")
 
 st.write(f"- 실 근무일 시급(세후) : {real_hour_income :,.0f}원 (한달 약 {work_day_per_month * avg_work_time:,.0f}시간)")
-st.write(f"- 통상 시급(세후) : {comm_hour_income :,.0f}원(한달 약 {30*24}시간)")
+st.write(f"- 통상 시급(세후) : {comm_hour_income :,.0f}원(한달 약 {30*24:,.0f}시간)")
 
 st.write(f"- 실 근무일 분급(세후) : {real_minute_income :,.0f}원 (한달 약 {work_day_per_month * avg_work_time * 60:,.0f}분)")
-st.write(f"- 통상 분급(세후) : {comm_minute_income :,.0f}원(한달 약 {30*24*60}분)")
+st.write(f"- 통상 분급(세후) : {comm_minute_income :,.0f}원(한달 약 {30*24*60:,.0f}분)")
 
-st.write(f"- 실 근무일 초급(세후) : {real_second_income :,.0f}원 (한달 약 {work_day_per_month * avg_work_time * 60*60:,.0f}초)")
-st.write(f"- 통상 초급(세후) : {comm_second_income :,.0f}원(한달 약 {30*24*60*60}초)")
+st.write(f"- 실 근무일 초급(세후) : {real_second_income :,.1f}원 (한달 약 {work_day_per_month * avg_work_time * 60*60:,.0f}초)")
+st.write(f"- 통상 초급(세후) : {comm_second_income :,.2f}원(한달 약 {30*24*60*60:,.0f}초)")
 
 
 
