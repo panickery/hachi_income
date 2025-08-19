@@ -12,14 +12,7 @@ st.sidebar.header("나는 얼마만큼 여유로운가?")
 st.sidebar.subheader("월급/수입/지출을 반영하여 하루/이번 주/이번 달 얼만큼의 금액을 사용 가능한지 알아보자.")
 st.sidebar.write('상세 노동 조건 :', "주당 출근 날짜, 평균 노동시간, 평균 점심 시간, 평균 출퇴근 시간 등 조정 가능")
 st.sidebar.write('상세 노동 조건 :', "기본 값 하루 노동 시간 8시간, 점심시간 1시간, 주 5일 노동.")
-
 st.sidebar.write('수입/지출 관리:', "수입/지출 내용을 추가할 수 있고, 통계 부분의 지출/사용 가능한 돈에 영향을 미침.")
-
-# option = st.sidebar.selectbox(
-#     '옵션을 선택하세요',
-#     ('옵션1', '옵션2', '옵션3')
-# )
-# st.sidebar.write('선택된 옵션:', option)
 
 # 세션 스테이트 초기화
 if "income" not in st.session_state:
@@ -34,12 +27,9 @@ income_input = st.number_input("그대의 세후 월급/소득(만원)", min_val
 st.caption("그대의 한달 월급 : {}".format(iu.convert_to_korean_currency_units(income_input)))
 if income_input != st.session_state.income:
     st.session_state.income = income_input
-# deduction_rate = st.slider("공제율(% 예상)", min_value=10, max_value=20, value=15) / 100
-# goal_amount = st.number_input("목표 금액 입력(만원)", min_value=0, step=10, value=1000)
 
 # 숨겨진 상세 정보 (expander 사용)
 with st.expander("상세 노동 조건", expanded=False):
-    # detail_value = st.text_input("상세 옵션", value="기본 상세정보")
     choice = st.radio(
         "주당 출근 날짜",
         ("1일", "2일", "3일", "4일", "5일", "6일", "7일"),
@@ -61,10 +51,10 @@ with st.expander("수입/지출 관리", expanded=False):
         submitted = st.form_submit_button('항목 추가')
         if submitted and name:
             if trans_type == '수입':
-                st.session_state.additional_incomes.append({'name': name, 'amount': amount})
+                st.session_state.additional_incomes.append({'id' : iu.get_random_id(), 'name': name, 'amount': amount})
                 st.success(f'수입 항목 추가됨: {name} - {amount:,.1f} 만원')
             else:
-                st.session_state.expenses.append({'name': name, 'amount': amount})
+                st.session_state.expenses.append({'id' : iu.get_random_id(), 'name': name, 'amount': amount})
                 st.success(f'지출 항목 추가됨: {name} - {amount:,.1f} 만원')
 
 # 수입내역 보여주기(+삭제 버튼)
@@ -78,7 +68,7 @@ for i, item in enumerate(st.session_state.additional_incomes):
         st.write(f"- {item['name']}: {item['amount']:,.1f} 만원")
     with col2:
         print(i, item)
-        if st.button(f"삭제 - {item.get('name', '')}"):
+        if st.button(f"삭제 - {item.get('name', '')}", key=item.get('id')):
             del st.session_state.additional_incomes[i]
             st.rerun()
 
@@ -92,7 +82,7 @@ for i, item in enumerate(st.session_state.expenses):
         st.write(f"- {item['name']}: {item['amount']:,.1f} 만원")
     with col2:
         print(i, item)
-        if st.button(f"삭제 - {item.get('name', '')}"):
+        if st.button(f"삭제 - {item.get('name', '')}", key=item.get('id')):
             del st.session_state.expenses[i]
             st.rerun()
 
@@ -103,7 +93,7 @@ st.metric("남은 금액", f"{leftover:,.1f} 만원")
 
 st.header("통계")
 salary, rate = iu.estimate_gross_salary_auto(income_input * 10000)
-st.write(f"- 추정 연봉(세전) : {salary :,.0f}만원 (공제율: {rate*100:.1f}%)")
+st.write(f"- 추정 연봉(세전) : {salary :,.0f}원 (공제율: {rate*100:.1f}%)")
 st.write(f"- 주급(세후) : {income_input * 10000/4.345 :,.0f}원 (한달 약 {4.345}주)")
 
 # 한달에 4.345주임.
@@ -131,7 +121,7 @@ comm_day_expense = expense_sum * 10000 / 30.416
 
 leftover_day = leftover * 10000 / 30.416
 
-st.write(f"- 실 근무일 일당(세후) : {real_day_income :,.0f}만원 (한달 약 {work_day_per_month:,.1f}일)")
+st.write(f"- 실 근무일 일당(세후) : {real_day_income :,.0f}원 (한달 약 {work_day_per_month:,.1f}일)")
 st.write(f"- 통상 일당(세후) : {comm_day_income :,.0f}원(한달 약 {30:,.0f}일)")
 
 st.write(f"- 실 근무일 시급(세후) : {real_hour_income :,.0f}원 (한달 약 {work_day_per_month * avg_work_time:,.0f}시간)")

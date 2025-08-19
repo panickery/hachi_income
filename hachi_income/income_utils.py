@@ -54,3 +54,15 @@ def estimate_gross_salary_auto(net_monthly_income):
 
     gross_annual_salary = (net_monthly_income * 12) / (1 - rate)
     return round(gross_annual_salary), rate
+
+def get_random_id() :
+    """
+    key에 할당할 random hash id 생성
+    """
+    import secrets
+    import hashlib
+
+    random_bytes = secrets.token_bytes(16)  # 16바이트 랜덤 값
+    hash_value = hashlib.sha256(random_bytes).hexdigest()  # SHA256 해시값(16진수 64자리)
+
+    return hash_value
